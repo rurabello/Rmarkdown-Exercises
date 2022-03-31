@@ -1,0 +1,34 @@
+---
+title: <span style="color:purple">**Roteiro para Verificação de Equipamentos**
+author: <span style="color:purple">Rubia Soraya Rabello
+date: "Última atualização em `r format(Sys.time(), '%d / %m / %Y às %H:%M horas')`"
+output: html_document
+geometry: "left = 2cm, right = 2cm, top = 2cm, bottom = 2cm"
+mainfont: Frutiger
+---
+
+<p align="center">![](https://icon-library.com/images/warning-icon-svg/warning-icon-svg-11.jpg){width=10%}</p>
+
+Considerando a diversidade de temas da área da saúde e sua dinâmica própria da área de informação, o conteúdo desta publicação recebe atualizações freqüentes. 
+
+Em cada edição, todas as instruções normativas apresentados são revisados, com atualização de dados e de fontes de informação, entre outros itens pertinentes. 
+
+Ademais, novos indicadores podem ser incluídos para ampliar as possibilidades de análise da qualidade e segurança dos equipamentos da Rede Prevent Senior.
+
+Novas versões serão publicadas para atualizá-lo sempre que for identificada alguma melhoria, seguindo as diretrizes da [Agência Nacional de Vigilância Sanitária - ANVISA](https://www.gov.br/anvisa/pt-br) e outras regulações e ou legislações que venham a vigorar. 
+      
+          
+          
+<span style="color:purple">**Introdução**  
+  
+O formulário deve ser aplicado para auditoria de equipamentos periodicamente, pela equipe do *Núcleo de Gestão em Tecnologia de Saúde* e *Núcleo de Segurança do Paciente*.
+ 
+   
+  <span style="color:purple">~**FORMULÁRIO**~  
+  
+  <p align="center">[Formulário para Verificação de Equipamentos ](C:/RMD/formulario.pdf){width=50%}</p>
+    
+      
+      
+  
+

@@ -1,0 +1,549 @@
+---
+title: <span style="color:#2f6a3f">Manual da Comissão de Revisão de Prontuário</span> 
+author: "Núcleo de Auditoria Médica - Sistema de Gestão da Qualidade Prevent Senior"
+date: "Última atualização em `r format(Sys.time(), '%d / %m / %Y às %H:%M horas')`"
+geometry: "left = 2cm, right = 2cm, top = 2cm, bottom = 2cm"
+mainfont: Frutiger
+
+#------------------------------------------------------------------------------#
+
+header-includes: 
+
+  \usepackage{amsmath}
+  \usepackage{float}
+  \usepackage{bm}
+  \usepackage[brazil]{babel}
+ 
+#------------------------------------------------------------------------------#
+output:
+  rmdformats::html_clean:
+    fig_height: 7
+    fig_width: 7
+    thumbnails: true
+    lightbox: true
+    toc: true
+    toc_depth: 3
+
+---
+
+***
+<p align="center">![](https://icon-library.com/images/warning-icon-svg/warning-icon-svg-11.jpg){width=10%}</p>
+
+Considerando a diversidade de temas da área da saúde e sua dinâmica própria da área de informação, o conteúdo desta publicação recebe atualizações freqüentes. 
+
+Em cada edição, todas as instruções normativas apresentados são revisados, com atualização de dados e de fontes de informação, entre outros itens pertinentes. 
+
+Ademais, novos indicadores podem ser incluídos para ampliar as possibilidades de análise da qualidade e segurança da organização das informações sobre a saúde dos beneficiários dispostas nos prontuários da Rede Prevent Senior.
+
+Novas versões serão publicadas para atualizá-lo sempre que for identificada alguma melhoria, seguindo as diretrizes do [Conselho Federal de Medicina](https://portal.cfm.org.br/) e outras regulações e ou legislações que venham a vigorar. 
+
+
+***
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(eval = TRUE,            # Avalia code chunk
+                      echo = FALSE,           # Aparece source code na saída
+                      include = TRUE,         # Inclui qualquer coisa code chunk na saída
+                      warning = FALSE,        # Aparece menssagem de avisos
+                      message = FALSE,        # Aparece mensagem de erro
+                      collapse = TRUE,        # Aparece saída de texto e source code em único code block
+                      cache = FALSE,          # Avalia o code chunk em cada compilação
+                      fig.pos = "H",          # Posição da figura
+                      fig.align = "center",   # Alinhamento da figura
+                      fig.height = 7,         # Tamanho da altura da figura - altura
+                      fig.width = 12          # Tamanho da altura da figura - comprimento
+                      )           
+
+```
+
+```{r}
+if (!require("pacman")) install.packages("pacman")
+
+pacman::p_load(pacman,
+               magrittr,
+               rio,
+               tidyverse,
+               ggpubr,
+               factoextra,
+               gridExtra,
+               readxl,
+               openxlsx,
+               writexl,
+               googlesheets4,
+               tiff,
+               htmlwidgets,
+               googledrive,
+               lubridate,
+               ggmap,
+               plotly,
+               data.table,
+               fst,
+               kableExtra,
+               Hmisc,
+               jsonlite,
+               httr,
+               highcharter,
+               Quandl,
+               DT,
+               ids,
+               uuid,
+               qrcode,
+               sampling,
+               knitr,
+               tinytex,
+               rcompanion,
+               effectsize,
+               rstatix,
+               dunn.test,
+               FSA,
+               ggrepel,
+               cluster, 
+               utf8,
+               usethis)
+```
+
+
+***
+
+# <span style="color:#2f6a3f">Introdução</span>
+
+<br>
+O [prontuário do paciente](https://pesquisa.in.gov.br/imprensa/jsp/visualiza/index.jsp?jornal=1&pagina=184&data=09/08/2002) é um documento único formado por um conjunto de informações, sinais e imagens registradas, estruturada através de fatos, acontecimentos e situações sobre a saúde do paciente e a assistência a ele prestada, de cunho legal, sigiloso e científico, que permite a comunicação entre membros da equipe multiprofissional e a continuidade da assistência prestada ao indivíduo.
+
+<br>
+Além de instrumento de defesa legal, tem papel fundamental como meio de comunicação e fonte de informação da equipe assistencial, visando a qualidade de atendimento. A qualidade de registro merece atenção especial de toda equipe de saúde, pois guarda informações essenciais ao cuidado do paciente. 
+
+<br>
+“O [prontuário médico](https://portal.cfm.org.br/artigos/prontuario-medico/) é um documento elaborado pelo professional e é uma ferramenta fundamental para seu trabalho. Nele constam, de forma organizada e concisa, todos os dados relativos ao paciente, como:
+    + seu histórico familiar, 
+    + anamnese, 
+    + descrição e evolução de sintomas, 
+    + exames,
+    + indicações de tratamentos e prescrições. 
+
+<br>
+Feito no consultório ou hospital, o prontuário é composto de informações valiosas tanto para o paciente como para o próprio médico. Seu principal objetivo é facilitar assistência ao paciente. Apesar do termo ”prontuário médico”, este documento é de propriedade do paciente, que tem total direito de acesso e pode solicitar cópia. 
+
+<br>
+Ao médico e ao estabelecimento de saúde cabe sua a elaboração e a guarda. Até poucos anos atrás, o acesso ao prontuário era de exclusividade do médico. Entretanto, hoje esse conjunto de informações deve ser colhido de forma multidisciplinar, assim como deve ser a assistência em saúde. Os dados fornecidos por enfermeiros, fisioterapeutas, nutricionista ou de qualquer outro profissional da área de saúde, são de grande importância.”
+
+<br>
+
+A [Resolução do Conselho Federal de Medicina nº 1.638/2002](https://sistemas.cfm.org.br/normas/visualizar/resolucoes/BR/2002/1638) – Estabelece a criação das Comissões de Revisão de Prontuários nos estabelecimentos e/ou instituições de saúde onde se presta assistência médica. Esta Comissão tem natureza consultiva, deliberativa, normativa, educativa e independente, tendo por objetivo analisar e acompanhar os prontuários médicos. A qualidade de registro contribui com o processo de gestão assistencial, impactando diretamente na qualidade da assistência prestada e consequentemente na segurança do paciente.
+
+<br>
+
+***
+
+# <span style="color:#2f6a3f">Legislação</span>
+
+<br>
+A Comissão de Revisão de Prontuários atende às seguintes legislações:
+<br>
+
+* [Resolução do Conselho Federal de Medicina (CFM) nº 1.638/2002](https://sistemas.cfm.org.br/normas/visualizar/resolucoes/BR/2002/1638) – Estabelece a criação das Comissões de Revisão de Prontuários nos estabelecimentos e/ou instituições de saúde onde se presta assistência médica.
+
+<br>
+
+* [Resolução CFM nº 1.639/2002](https://sistemas.cfm.org.br/normas/visualizar/resolucoes/BR/2002/1639)</span> – Aprova as "Normas Técnicas para o Uso de Sistemas Informatizados para a Guarda e Manuseio do Prontuário Médico".
+
+<br>
+
+* [Resolução CFM nº 1.821/2007](https://sistemas.cfm.org.br/normas/visualizar/resolucoes/BR/2007/1821) – Aprova as normas técnicas concernentes à digitalização e ao uso de sistemas informatizados para a guarda e manuseio dos documentos dos prontuários dos pacientes, autorizando a eliminação do papel e a troca de informação identificada em saúde.
+
+<br>
+
+* [Resolução CFM nº 2.218/2018](https://sistemas.cfm.org.br/normas/visualizar/resolucoes/BR/2018/2218) - Revoga o artigo 10º da Resolução CFM nº 1.821/2007, de 23 de novembro de 2007, que aprova as normas técnicas concernentes à digitalização e uso dos sistemas informatizados para a guarda e manuseio dos documentos dos  prontuários dos pacientes, autorizando a eliminação do papel e a troca de informação identificada em saúde.
+
+* [Resolução CFM nº 1605/2000](https://sistemas.cfm.org.br/normas/visualizar/resolucoes/BR/2000/1605) – O médico não pode, sem o consentimento do paciente, revelar o conteúdo do prontuário ou ficha médica.
+
+<br>
+
+* [Lei nº 13.787/2018](https://www.in.gov.br/materia/-/asset_publisher/Kujrw0TZC2Mb/content/id/57221806/do1-2018-12-28-lei-n-13-787-de-27-de-dezembro-de-2018-57221499) - Dispõe sobre a digitalização e a utilização de sistemas informatizados para a guarda, o armazenamento e o manuseio para o prontuário do paciente.
+
+<br>
+
+***
+
+# <span style="color:#2f6a3f">Objetivos</span>
+
+<br>
+
+* Cumprir exigências legais conforme Resolução do [Conselho Federal de Medicina nº 1.638/2002](https://sistemas.cfm.org.br/normas/visualizar/resolucoes/BR/2002/1638);
+
+<br>
+
+* Prezar pela qualidade de registro do prontuário, colaborando com a melhor assistência à saúde do paciente;
+
+<br>
+
+* Estar disponível para auxílio da equipe assistencial em casos de dúvida de preenchimento do prontuário;
+
+<br>
+
+* Ser centro disseminador da informação sobre a importância de preenchimento correto e completo do prontuário do paciente;
+
+<br>
+
+* Analisar e sugerir a padronização de documentos a serem incluídos e/ou retirados do prontuário padrão para aprovação da Diretoria;
+
+<br>
+
+* Comunicar aos responsáveis pelas áreas assistenciais e de apoio as oportunidades de melhoria;
+
+<br>
+
+* Sugerir quando julgar necessário ações de <span style="color:#962d38">**long life learning**<\span>;
+
+<br>
+
+* Fazer cumprir pendências porventura encontradas em prontuários, solicitado aos profissionais que desempenhem seu papel na responsabilidade com o prontuário do paciente;
+
+<br>
+
+* Comunicar aos respectivos <span style="color:#962d38">**Comitês de Ética**<\span> e ao 
+<span style="color:#962d38">**Núcleo de Auditoria Médica**<\span> do Sistema de Gestão da Qualidade, em caso de descumprimento das obrigações legais;
+<br>
+
+* Analisar a eficácia dos profissionais de saúde por meio do quociente entre a produção realizada do prontuário e sua produção esperada conforme a [Conselho Federal de Medicina nº 1.638/2002](https://sistemas.cfm.org.br/normas/visualizar/resolucoes/BR/2002/1638) :
+
+|Código/Identificador|Numerador e Denominador                                                
+|--------------------|---------------------------------------------------------|
+|101                 |Número de prontuários não defeituosos                    |
+|102                 |Número total de prontuários inspecionados                |
+
+
+|Código/Identificador| Nome do Indicador                          | Composição |
+|--------------------|--------------------------------------------|------------|
+|103                 |Eficácia da produção de prontuário          |101/102     |
+
+* A informação gerada pelo indicador será fornecida por comparação da série histórica.
+
+<br>
+<span style="color:#962d38">**Método de cálculo**</span>: 
+
+$$
+\begin{aligned}
+epp &= (\frac{Número\ de\ prontuários\ não\ defeituosos\ 
+}{Número\ total\ de\ prontuários\ inspecionados)}\times100 
+\end{aligned}
+$$
+
+***
+
+# <span style="color:#2f6a3f">Composição</span>
+
+<br>
+
+A composição da <span style="color:#962d38">**Comissão de Revisão de Prontuário**</span> deve ser de no mínimo 06 (seis) membros, sendo um presidente, um vice presidente e um secretário, sendo os demais membros classificados como membros da comissão.
+
+<br>
+
+O <span style="color:#962d38">**Presidente da Comissão**</span> e seu vice presidente devem ser obrigatoriamente médicos. Os demais membros devem ser escolhidos entre a equipe assistencial, conforme determinação do Diretor da unidade.
+
+<br>
+
+***
+
+# <span style="color:#2f6a3f">Mandato</span>
+
+<br>
+
+O mandato da comissão será de <span style="color:#962d38">**24 (vinte e quatro) meses**</span>, a contar da eleição e registro em documento de Ata e no Conselho Regional de Medicina de São Paulo, e poderá ser renovado por decisão da Direção Geral. A substituição de qualquer membro, a qualquer momento, deve ser divulgada e comunicado ao órgão.
+
+<br>
+
+***
+
+# <span style="color:#2f6a3f">Atribuições</span>
+
+<br>
+
+## <span style="color:#613a1f">Comissão</span>
+
+<br>
+
+* Registrar em formulário próprio a avaliação dos itens que deverão constar obrigatoriamente:
+
+    + Identificação do paciente em todos as páginas, termo geral de internação, anamnese, exame físico, exames complementares, e seus respectivos resultados, hipóteses diagnósticas, diagnóstico definitivo, consentimentos específicos quando necessários, tratamento efetuado e outros documentos pertinentes ao atendimento;
+
+    + Obrigatoriedade de letra legível do profissional que atendeu o paciente (quando aplicável), bem como de assinatura e carimbo ou nome legível do profissional e respectiva inscrição no conselho de classe CRM e RQE, quando aplicáveis);
+
+    + Obrigatoriedade da avaliação médica e de enfermagem e registro diário da evolução clínica do paciente, bem como a prescrição médica consignando data e hora e do atendimento;
+
+    + Preenchimento completo do sumário de alta; e
+
+    + Ordenação do prontuário.
+
+* Avaliar mensalmente os prontuários conforme os critérios definidos pelo Núcleo de Metrologia do Sistema de Gestão da Qualidade para a <span style="color:#962d38">**técnica de amostragem probabilística, com margem de erro de 5%**<\span>;
+
+* Manter sigilo ético das informações decorrentes das análises;
+
+* Solicitar parecer técnico aos comitês de ética, quando necessário;
+
+* Recomendar a inclusão, alteração e exclusão de documentos do Prontuário do Paciente;
+
+* Desenvolver atividades de caráter técnico-científico com fins de subsidiar conhecimentos relevantes para a Instituição;
+
+* Estabilizar o processo de produção de prontuário  com <span style="color:#962d38">**ciclos entre 21 e 30 unidades temporais de medida (dias, semanas, meses)**<\span>,  para melhorias operacionais, com consultorias por meio do Núcleo de Long Life Learning do Sistema de Gestão da Qualidade. 
+<br>
+
+## <span style="color:#613a1f">Presidente da Comissão</span>
+
+
+* Convocar e presidir as reuniões;
+
+* Representar a comissão junto à diretoria da instituição ou indicar seu representante;
+
+* Subscrever todos os documentos e resoluções da comissão previamente aprovados pelos membros desta;
+
+* Fazer cumprir a normatização e todas as atribuições instituídas;
+
+* Participar das decisões da comissão.
+
+* Nas decisões da comissão, havendo empate, sem prejuízo de seu voto, o Presidente exercerá o voto de qualidade.
+
+<br>
+
+## <span style="color:#613a1f">Vice Presidente da Comissão</span>
+
+* Assumir as atividades do presidente em sua ausência.
+
+
+## <span style="color:#613a1f">Secretário da Comissão</span>
+
+
+* Organizar a pauta das reuniões;
+
+* Receber e protocolar as demandas pertinentes à CRP;
+
+* Lavrar a ata das sessões/reuniões;
+
+* Convocar os membros da comissão para as reuniões;
+
+* Organizar e manter o arquivo da comissão;
+
+* Preparar a correspondência;
+
+* Compartilhar os dados das análises e reuniões com o Núcleo de Metrologia e o Núcleo de Auditoria do Sistema de Gestão Qualidade;
+
+* Distruibuir e controlar as atividades dos membros da comissão.
+
+
+## <span style="color:#613a1f">Membros da Comissão</span>
+
+* Participar das reuniões ordinárias e extraordinárias;
+
+* Avaliar os prontuários conforme sistemática;
+
+* Avaliar os indicadores de avaliação de prontuários, acompanhando os processo de melhoria contínua dos registros;
+
+* Participar das decisões da CRP.
+
+
+***
+
+## <span style="color:#613a1f">Funcionamento e organização</span>
+
+<br>
+
+A Comissão de Revisão de Prontuários reunir-se-á uma vez por mês e extraordinariamente quando convocada pelo presidente.
+
+<br>
+
+Os serviços prestados pela CRP não serão remunerados, sendo considerado de relevante interesse geral da empresa.
+
+<br>
+
+A ausência de um membro em três reuniões consecutivas, sem justificativa, ou ainda seis reuniões não consecutivas, sem justificativa, durante 12 meses, resulta em sua exclusão automática.
+
+<br>
+
+A reunião da comissão será iniciada pelo presidente ou vice, com a presença mínima de 50% +1 dos membros.
+
+<br>
+
+Na ausência do presidente e de seu vice, os membros da comissão poderão realizar a reunião mantendo um quórum mínimo de 50% +1 dos membros.
+
+<br>
+
+As decisões da comissão serão tomadas, após aprovação, por meio de votação aberta e justificada, por maioria simples dos membros presentes. 
+
+<br>
+
+Além das reuniões ordinárias, poderão ser realizadas reuniões extraordinárias para tratar de assuntos que exijam discussões emergentes ou urgentes, podendo ser convocadas pelo diretor da Instituição, pelo presidente ou vice-presidente da comissão, ou por quaisquer dos membros com justificativa da solicitação da reunião.
+
+<br>
+
+## <span style="color:#613a1f">Composição do prontuário padrão</span>
+
+<br>
+
+A composição do prontuário é padrão em todos as unidades da Rede Prevent Senior. Entretanto, alguns documentos podem ser individualizados conforme o tipo de serviço desempenhado em cada Unidade.
+
+<br>
+
+A organização dos prontuários deve seguir a lista de verificação de Fechamento do Prontuário, indexado na plataforma do Qualiex sob registro de documento <span style="color:#962d38">**FOR.RSM.ADM.006.2**</span>, sempre que possível, respeitando as peculiaridades do tipo de serviço ofertado ao cliente.
+
+<br>
+
+## <span style="color:#613a1f">Avaliação do prontuário pelo admnistrativo</span>
+
+<br>
+
+O profissional do cargo administrativo de cada setor das unidades de internação e atendimento realizará a conferência individual de todos os prontuários, seguindo a padronização e integridade dos documentos, de acordo com a ferramenta <span style="color:#962d38">**Lista  de Fechamento de Prontuário**</span>, disponível na plataforma Qualiex sob o código <span style="color:#962d38">**FOR.RSM.ADM.006.2**</span>.
+
+<br>
+
+Este documento apresenta quesitos a serem analiados como presentes ou não, assim como a opção de <span style="color:#962d38">**não se aplica**</span>, devendo profissional tabém atentar sobre a integridade e legebilidade da documentação. A composição de prontuários difere em casos de internação clínica e cirúrgica, devendo o profissional responsável por este processo atentar em diferenciar a obrigatoriedade dos documentos específicos.
+
+<br>
+
+Caso seja identificado a falta de algum documento obrigatório, o profissional deve comunicar ao enfermeiro responsável para que os documento faltante seja providenciado pelo profissional responsável, independente da equipe pertencente. Paralelamente, não devem ser poupados esforços por parte da equipe administrativa e demais profissionais cientes da pendência, em contactar e questionar o profissional responsável pelo documento faltante a fim de permitir a correção com brevidade, incluisive com convocação do profissional envolvido para que retifique a inconsistência
+
+<br>
+
+Os profissionais administrativos devem analisar a conformidade referente à assinatura e ao carimbo, sendo entendido como conforme quando o documento estiver devidamente assinado e carimbado, ou quando a assinatura estiver identificada pelo nome completo do profissional e seu respectivo registro no conselho profissional e seu registro de qualificação de especialista (RQE), quando aplicável.
+
+<br>
+
+Ao final de cada fechamento, o profissional administrativo irá finalizar o fechamento, anexando o a lista de verificação para conferência pela equipe da CRP.
+
+<br>
+
+## <span style="color:#613a1f">Avaliação do prontuário pela comissão</span>
+
+<br>
+
+* Caberá à Comissão realizar a avaliação dos prontuários conforme o plano amostral probalístico estabelecido pelo Núcleo de Metrologia do Sistema de Gestão da Qualidade de prontuários, baseando-se no número de saídas da unidade no mês vigente, para que seja possível retificar as inconsistências no momento oportuno.   
+
+*Os critérios de seleção, por ordem de prioridade, são: óbitos, prontuário com registro de evento adverso registrado no Tracker (sistema de notificação de eventos adversos do Núcleo de Segurança do Paciente do Sistema de Gestão da Qualidade), permanência hospitalar acima de 30 dias.
+
+<br>
+
+Seguindo o <span style="color:#962d38">**Formulário de Avaliação de Prontuários Médicos**</span>, documento indexado na plataforma Qualiex sob código <span style="color:#962d38">**FOR.RSM.MDC.003.1**</span>.  Os membros da comissão seguirão os itens descritos, recebendo cada item avaliado o conceito de:
+
+* conforme,
+* não conforme
+* não verificado,
+* não de aplicável. 
+
+    + Serão entendidos como <span style="color:#962d38">**conforme**</span> (não defeitusoso) os documentos que cumprirem a todos os critérios descritos no respectivo tópico de acordo com a descrição do Anexo 3. 
+
+    + O <span style="color:#962d38">**não verificado**</span> deverá ser considerado quando o critério avaliado não foi verificado durante a inspeção.
+    
+    + O <span style="color:#962d38">**não aplicável**</span> deverá ser considerado quando o critério avaliado não foi ocorrido na assistência ao paciente.
+    
+<br>
+
+* Ao final da análise, o prontuário deve ser classificado como:
+
+* <span style="color:#962d38">**Conforme**</span>,
+* <span style="color:#962d38">**Não conforme**</span>. 
+    
+    + Receberá a classificação de <span style="color:#962d38">**Conforme**</span> o prontuário que não possuir algum elemento avaliado como <span style="color:#962d38">**Não conforme**</span>. 
+    
+    + Caso seja encontrado algum elemento <span style="color:#962d38">**Não conforme**</span>, o campo de avaliação final deverá ser sinalizado como <span style="color:#962d38">**Não conforme**</span>.
+
+<br>
+
+* Os prontuários que receberem a avaliação final <span style="color:#962d38">**Não conforme**</span> devem ser retidos na unidade responsável e a comissão deve notificar o profissional responsável pela documentação pendente para que entregue o documento em até <span style="color:#962d38">**72hs úteis**</span>. 
+
+* Caso o mesmo não cumpra com a solicitação, uma segunda notificação deve ser encaminhada ao profissional. Se a solicitação de resolução da pendência não for atendida, a comissão deve encaminhar um relatório solicitando a avaliação do referido profissional ao Comitê de Ética pertinente, com a justificativa de possível falha de ética e responsabilidade profissional no cumprimento do registro em documento oficial e obrigatório, solicitando providências cabíveis.
+
+<br>
+
+* Os prontuários que forem classificados como <span style="color:#962d38">**Conforme**</span> devem ser encaminhados para arquivamento. Cabe acrescentar que o campo <span style="color:#962d38">**observações**</span> do formulário deve ser utilizado para registro de providências tomadas de forma evolutiva para correção das pendências encontradas.
+
+*Esta comissão deve preencher o formulário de avaliação em duas cópias, anexando uma delas nos prontuários avaliados e arquivando a segunda cópia em arquivo destinado no grupo restrito da CRP no Workplace. 
+
+* Todas as avaliações devem ser encaminhadas de forma eletrônica para o Núcleo de Metrologia e para o Núcleo de Auditoria do Sistema de Gestão da Qualidade até o <span style="color:#962d38">**5º dia útil**</span> após a reunião ordinária da CRP. 
+
+<br>
+
+* Após o fechamento das análises do mês, esta comissão irá redigir ata com relatório compilado das atividades do mês, seguido de atitudes tomadas para as pendências encontradas, assim como plano de ação para as pendências que ainda se fizerem presentes. Esta ata deve ser encaminhada até o <span style="color:#962d38">**10° dia útil**</span> de cada mês, de forma eletrônica, para o Diretor da unidade, para o Núcleo de Metrologia e para o Núcleo de Auditoria do Sistema de Gestão da Qualidade. 
+
+*Ademais, as atas devem ser indexadas pelo Secretário da Comissão para arquivamento dentro do 
+<span style="color:#962d38">**grupo restrito da CRP de cada unidade, no Workplace**</span>.
+
+<br>
+
+* O Núcleo de Auditoria do Sistema de Gestão da Qualidade redigirá os relatórios mensais e trimestrais acerca das atividades destas comissões, sempre enviando disponibilzadas na área restrita das CRP, em seus respectivos espaços no Workplace, para os diretores de cada unidade. 
+
+* Além disso, haverão reuniões regulares, a cada final de ciclo histórico comparativo,  entre a diretoria de cada unidade, membros da comissão, e o Núcleo de Auditoria do Sistema de Gestão da Qualidade para discussão das oportunidades de melhorias e construções de planos de ação para intervenção junto à equipe. Estes reuniões devem ser preferencialmente realizadas na plataforma Workplace, onde as <span style="color:#962d38">**Lives**</span> são automaticamente registradas, ou seja há registro fiel dos desdobramentos das reuniões. 
+
+<br>
+
+***
+
+## <span style="color:#613a1f">Disposições gerais</span>
+
+<br>
+
+Os casos omissos nesta normatização serão resolvidos pelos membros da CRP em conjunto com o diretor geral da Unidade.
+
+<br>
+
+***
+
+## <span style="color:#613a1f">Apêndice - Critérios de avaliação de prontuário</span>
+
+<br>
+
+|**Critérios/Formulário**                     |**O que avaliar?**                 |
+|---------------------------------------------|-----------------------------------|
+|Identificação do paciente                    |Presença de três identificadores do Protocolo de Identificação Segura – Nome completo, data de nascimento e número de prontuário do paciente. Nos casos de crianças, acrescentar o nome da mãe aos identificadores obrigatórios. Todos devem estar corretamente registrados.|
+|Legibilidade de documentos manuais           |Em casos de documentos de preenchimento manual, o registro deve permitir a facilidade da leitura e compreensão do texto, assim como demais termos.|
+|Assinatura dos termos                        |Avaliar assinatura dos termos de responsabilidade e autorização de tratamento, termo de orientação do risco de queda.|
+|Carimbo/assinatura de toda equipe em evoluções e prescrições|Checar assinatura e carimbo. No caso de ausência, podem ser considerados nome completo do profissional e seu respectivo registro no conselho profissional.|
+|Relatório de admissão médica                 |Avaliar se existe relatório de admissão médica em todas as clínicas que o paciente foi admitido.|
+|Relatório de admissão de enfermagem          |Avaliar se existe relatório de admissão de enfermagem em todas as clínicas que o paciente foi admitido.|
+|Evolução médica diária                       |Registro diário. Data e hora do atendimento.|
+|Evolução de enfermagem diária                |Registro diário. Data e hora do atendimento.|
+|Evolução equipe multiprofissional            |Verificar registro de data e hora do atendimento.|
+|Registro de procedimentos invasivos e não invasivos, excluindo cirurgia|Em caso do paciente submetido a procedimentos a beira leito, deve haver registro claro do profissional que o realizou, atentando para data e hora do atendimento, assim como descrição do procedimento e intercorrências, caso tenham ocorrido.|
+|Relatório de transferência                   |Atentar que deve ser registrado um relatório para cada transferências, inclusive entre setores.|
+|Evolução de constatação de óbito com descrição de sequência de causa mortis|Avaliar o registro de “Relatório Médico de Óbito” no sistema, seguindo os itens do formulário de Declaração de Óbito ou Encaminhamento SVO/IML.|
+|Relatório de alta médica                     |Avaliar se o CID principal descrito no relatório médico de alta é o mesmo da última evolução médica do paciente.|
+|Termo de consentimento cirúrgico             |Em casos de pacientes submetidos a procedimentos em sala cirúrgica, atentar para a assinatura do paciente e do profissional que aplicou o termo. Em casos de urgência/emergência, quando o consentimento não for possível, deverá constar no termo a assinatura de dois médicos.|
+|Termo de consentimento anestésico            |Em casos de pacientes submetidos a procedimentos em sala cirúrgica, atentar para a assinatura do paciente e do profissional que aplicou o termo. Em casos de urgência/emergência, quando o consentimento não for possível, deverá constar no termo a assinatura de dois médicos|
+|Formulário de avaliação anestésica           |Em casos de cirurgias eletivas, deve haver o formulário de avaliação anestésica preenchido por algum membro da equipe de anestesia.|
+|Evolução anestésica                          |Deve haver registro da avaliação pós cirurgia no suporte ao paciente na RPA.|
+|Horário claro em evolução de alta da RPA     |Checar se registro explícito de alta da RPA determinada pelo anestesista e o horário em que a alta ocorreu efetivamente para o setor de destino.|
+|Descrição cirúrgia                           |Avaliar a presença do formulário de cirurgia.|
+
+---
+
+<br>
+<p align="center">SGQ Prevent Senior, 2022.  Copyleft .</p>
+
+***
+
+|**Elaboração**                               |**Função**              |**Data**     |
+|---------------------------------------------|------------------------|-------------|
+|Fernanda Kelly Marques de Souza Adriano      |*Consultora Médica   *  |29/03/2022   |
+|Nelson Bruni Cabral de Freitas               |*Consultor Médico*      |29/03/2022   |
+|**Revisão**                                  |**Função**              |**Data**     |
+|Antonio Sergio da Silva                      |*Consultor Médico*      |29/03/2022   |
+|**Aprovação**                                |**Função**              |**Data**     |
+|Cleber Nunes da Rocha                        |*Consultor Médico*      |29/03/2022   |
+:Histórico da Revisão
+
+<br> 
+
+```{r include = TRUE}
+ 
+id_generation <- UUIDgenerate()
+
+
+```
+
+<p align="center">**UUID**:`r id_generation `. </p>
+
+```{r include=TRUE, fig.pos = "H",fig.align = "center", fig.height = 2,fig.width = 4}
+
+qr <- qr_code(id_generation)
+plot(qr)
+
+```
+
